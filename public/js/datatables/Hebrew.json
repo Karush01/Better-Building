@@ -1,0 +1,30 @@
+{
+  "sProcessing": "מעבד...",
+  "sLengthMenu": "הצג _MENU_ פריטים",
+  "sZeroRecords": "לא נמצאו רשומות מתאימות",
+  "sInfo": "מציג _START_ עד _END_ מתוך _TOTAL_ רשומות",
+  "sInfoEmpty": "מציג 0 עד 0 מתוך 0 רשומות",
+  "sInfoFiltered": "(מסונן מסך _MAX_ רשומות)",
+  "sInfoPostFix": "",
+  "sEmptyTable": "אין נתונים זמינים",
+  "sSearch": "חפש:",
+  "sUrl": "",
+  "oPaginate": {
+    "sFirst": "ראשון",
+    "sPrevious": "הקודם",
+    "sNext": "הבא",
+    "sLast": "אחרון"
+  },
+  "buttons": {
+    "copy": "העתק",
+    "print": "הדפס",
+    "search": "חפש"
+  },
+  "select": {
+    "rows": {
+      "_": "%d rows selected",
+      "0": "Click a row to select",
+      "1": "Just one row selected"
+    }
+  }
+}
