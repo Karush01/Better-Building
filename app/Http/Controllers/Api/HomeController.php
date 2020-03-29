@@ -23,19 +23,19 @@ class HomeController extends Controller
             ]);
         }
 
-        if ($user->hasrole('tenant')):
-
+        if ($user->hasrole('tenant') != false) {
             $building = Building::where('user_id', "=", $user->id)->first();
+
             $tasks = Task::whereHas('building.user', function ($q) {
                 $q->select('id');
             }, '=', $user->id);
+
             $total_skus = $tasks->where('status_id', '=', 1)->groupBy('sku_id')->get();
             $total_skus = count($total_skus);
             $total_overdue_tasks = $tasks->where('status_id', '=', 3)->count();
             $total_done_tasks = $tasks->where('status_id', '=', 2)->count();
-            $total_open_tickets = Ticket::all()->where('status_id', '=', 1)->where('user_id', '=', Auth::user()->id)->count();
+            $total_open_tickets = Ticket::all()->where('status_id', '=', 1)->where('user_id', '=',$user->id)->count();
             $tasks_month_year = $this->getFulldateyear($tasks);
-
             return response()->json([
                 'total_skus' => $total_skus,
                 'total_overdue_tasks' => $total_overdue_tasks,
@@ -45,8 +45,7 @@ class HomeController extends Controller
                 'building' => $building
             ], 201);
 
-        elseif ($user->hasrole('management_company')):
-
+        } elseif ($user->hasrole('management_company') != false) {
             $company = ManagementCompany::where('user_id', '=', $user->id)->first();
             $total_buildings = Building::where('management_company_id', '=', $company->id)->count();
             $tasks = Task::whereHas('building.managementcompany', function ($q) {
@@ -70,8 +69,7 @@ class HomeController extends Controller
                 'total_open_tickets' => $total_open_tickets,
                 'tasks_month_year' => $tasks_month_year
             ], 201);
-
-        endif;
+        }
 
         $companies = ManagementCompany::all('id')->count();
         $buildings = Building::all('id')->count();
@@ -83,8 +81,11 @@ class HomeController extends Controller
         $tasks_today_open_count = Task::whereDay('last_date', date('d'))->count();
         $users = User::with('roles')->get();
 
+
         $users_count = $users->groupBy(function ($item, $key) {
-            return [$item->roles[0]->name];
+            if (count($item->roles) != 0){
+                return [$item->roles[0]->name];
+            }
         });
 
         $users_count = $users_count->map(function ($item, $key) {
@@ -159,7 +160,7 @@ class HomeController extends Controller
             ]);
         }
 
-        if ($user::id() == $request->input('id')):
+        if ($user->id == $request->input('id')):
             $tasks = Task::select('last_date', 'status_id', 'sku_id')->whereHas('building.user', function ($q) {
                 $q->select('id');
             }, '=', $request->input('id'))
@@ -215,6 +216,8 @@ class HomeController extends Controller
         }
 
         $year = date("Y");
+
+        $month_year = json_decode($request->input('month_year'));
 
         $tasks = Task::whereYear('last_date', date('Y', strtotime($year)))->whereMonth('last_date', date('m', strtotime($month_year[0])))->get();
 

@@ -16,7 +16,7 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api', function () {
 
 });
-Route::post('/auth', 'Api\MainController@authenticate');
+//Route::post('/auth', 'Api\MainController@authenticate');
 
 Route::prefix('auth')->group(function () {
     Route::post('/register', 'Api\AuthController@register');
@@ -30,6 +30,7 @@ Route::prefix('buildings')->group(function () {
     Route::post('/edit', 'Api\ApiBuildingsController@edit');
     Route::post('/update', 'Api\ApiBuildingsController@update');
 });
+
 Route::prefix('home')->group(function () {
     Route::post('/index', 'Api\HomeController@index');
     Route::post('/getFullDateYear', 'Api\HomeController@getFullDateYear');

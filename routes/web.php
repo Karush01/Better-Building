@@ -35,7 +35,6 @@ Route::group(['middleware' => ['https']], function () {
     Route::post('/home/gettasksbymonthyear', 'HomeController@getTasksByMonthYear');
     Route::post('/home/getallusertasks', 'HomeController@getAllUserTasks');
 
-    Route::resource('buildings', 'ApiBuildingsController');
     Route::resource('managementcompanies', 'ManagementCompaniesController');
     Route::resource('statuses', 'StatusesController');
     Route::resource('skus', 'SkusController');
