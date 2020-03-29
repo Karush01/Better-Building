@@ -28,14 +28,16 @@ class ApiBuildingsController extends Controller
      */
     public function getBuildings(Request $request)
     {
-        if (!$request->user()->authorizeRoles(['director', 'management_company', 'tanant'])) {
+        $user = User::where('access_token',$request->access_token)->first();
+
+        if (!$user->authorizeRoles(['director', 'management_company', 'tanant'])) {
             return response()->json([
                 'error' => 'invalid Role'
             ], 500);
         }
 
-        if (Auth::user()->hasrole('management_company')):
-            $company = ManagementCompany::where('user_id', '=', Auth::user()->id)->first();
+        if ($user->hasrole('management_company')):
+            $company = ManagementCompany::where('user_id', '=', $user->id)->first();
             $buildings = Building::with('managementCompany')->where('management_company_id', '=', $company->id);//->paginate();
         else:
             $buildings = Building::with('managementCompany');//->paginate();
@@ -53,6 +55,8 @@ class ApiBuildingsController extends Controller
      */
     public function getCompanyManagement(Request $request)
     {
+        $user = User::where('access_token',$request->access_token)->first();
+
         if (!$request->user()->authorizeRoles(['director', 'management_company'])) {
             return response()->json([
                 'error' => 'invalid Role'
@@ -71,6 +75,7 @@ class ApiBuildingsController extends Controller
      */
     public function store(Request $request)
     {
+
         request()->validate([
             'name' => 'required',
             'city' => 'required',
